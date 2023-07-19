@@ -1,0 +1,10 @@
+---
+
+github__org: ''
+github__repo: ''
+github__version: ''
+github__args: ''
+github__asset_name: ''
+github__notify: []
+github__retries: 10
+github__retry_delay: 10

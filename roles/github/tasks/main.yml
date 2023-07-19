@@ -1,0 +1,40 @@
+---
+
+- name: Task name
+  delegate_to: 'localhost'
+  become: false
+  ansible.builtin.stat:
+    path: '/tmp/{{ github__asset_name }}'
+  register: tmp
+
+- name: Get release info
+  delegate_to: 'localhost'
+  become: false
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/{{ github__org }}/{{ github__repo }}/releases/{{ 'tags/' if github__version != 'latest' }}{{ github__version }}"
+  register: release
+  when: not tmp.stat.exists
+
+- name: Get binary
+  delegate_to: 'localhost'
+  become: false
+  ansible.builtin.get_url:
+    url: '{{ url }}'
+    headers: { Accept: 'application/octet-stream' }
+    dest: '/tmp/{{ github__asset_name }}'
+  when: url
+  vars:
+    url: '{{ release | community.general.json_query(query) }}'
+    query: "(json.assets[?name=='{{ github__asset_name }}'].url)[0]"
+  register: download_result
+  retries: '{{ github__retries }}'
+  delay: '{{ github__retry_delay }}'
+  until: not download_result.failed
+# until: download_result.status_code != '200'
+  ignore_errors: '{{ ansible_check_mode }}'
+  notify: '{{ github__notify }}'
+
+- name: Install binary
+  ansible.builtin.copy:
+    src: '/tmp/{{ github__asset_name }}'
+  args: '{{ github__args }}'
