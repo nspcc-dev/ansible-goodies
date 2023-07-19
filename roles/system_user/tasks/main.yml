@@ -1,0 +1,16 @@
+---
+
+- name: Create '{{ system_user__group }}' system group
+  ansible.builtin.group:
+    name: '{{ system_user__group }}'
+    system: yes
+
+- name: Create '{{ system_user__user }}' system user
+  ansible.builtin.user:
+    name: '{{ system_user__user }}'
+    group: '{{ system_user__group }}'
+    password: '*'
+    shell: '/usr/sbin/nologin'
+    home: '{{ system_user__home }}'
+    system: yes
+    skeleton: no
