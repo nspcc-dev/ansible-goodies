@@ -1,0 +1,8 @@
+---
+
+mkprivdir__dir: ''
+mkprivdir__user: 'root'
+mkprivdir__group: 'root'
+mkprivdir__mode: '0750'
+
+mkprivdir__parent_dir: '{{ mkprivdir__dir | realpath | dirname }}'
