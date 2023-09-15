@@ -32,9 +32,9 @@
   until: not download_result.failed
 # until: download_result.status_code != '200'
   ignore_errors: '{{ ansible_check_mode }}'
-  notify: '{{ github__notify }}'
 
 - name: Install binary
   ansible.builtin.copy:
     src: '/tmp/{{ github__asset_name }}'
   args: '{{ github__args }}'
+  notify: '{{ github__notify }}'
