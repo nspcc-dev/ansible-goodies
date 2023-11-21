@@ -8,3 +8,6 @@ github__asset_name: ''
 github__notify: []
 github__retries: 10
 github__retry_delay: 10
+
+github__temp_dir: '/tmp'
+github__temp_asset_path: '{{ github__temp_dir }}/{{ github__asset_name }}-{{ github__version }}'

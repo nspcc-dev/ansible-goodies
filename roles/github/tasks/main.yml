@@ -4,7 +4,7 @@
   delegate_to: 'localhost'
   become: false
   ansible.builtin.stat:
-    path: '/tmp/{{ github__asset_name }}'
+    path: '{{ github__temp_asset_path }}'
   register: tmp
 
 - name: Get release info
@@ -21,7 +21,7 @@
   ansible.builtin.get_url:
     url: '{{ url }}'
     headers: { Accept: 'application/octet-stream' }
-    dest: '/tmp/{{ github__asset_name }}'
+    dest: '{{ github__temp_asset_path }}'
   when: url
   vars:
     url: '{{ release | community.general.json_query(query) }}'
@@ -35,6 +35,6 @@
 
 - name: Install binary
   ansible.builtin.copy:
-    src: '/tmp/{{ github__asset_name }}'
+    src: '{{ github__temp_asset_path }}'
   args: '{{ github__args }}'
   notify: '{{ github__notify }}'
