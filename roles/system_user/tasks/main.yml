@@ -11,6 +11,7 @@
     group: '{{ system_user__group }}'
     password: '*'
     shell: '/usr/sbin/nologin'
-    home: '{{ system_user__home }}'
+    home: "{{ system_user__home | d('/nonexistent', true) }}"
+    createhome: '{{ system_user__home | bool }}'
     system: yes
     skeleton: no
