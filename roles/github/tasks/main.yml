@@ -38,3 +38,4 @@
     src: '{{ github__temp_asset_path }}'
   args: '{{ github__args }}'
   notify: '{{ github__notify }}'
+  ignore_errors: '{{ ansible_check_mode }}'
