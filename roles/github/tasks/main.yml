@@ -22,7 +22,7 @@
     url: '{{ url }}'
     headers: { Accept: 'application/octet-stream' }
     dest: '{{ github__temp_asset_path }}'
-  when: url
+  when: url is truthy
   vars:
     url: '{{ release | community.general.json_query(query) }}'
     query: "(json.assets[?name=='{{ github__asset_name }}'].url)[0]"
@@ -30,7 +30,6 @@
   retries: '{{ github__retries }}'
   delay: '{{ github__retry_delay }}'
   until: not download_result.failed
-# until: download_result.status_code != '200'
   ignore_errors: '{{ ansible_check_mode }}'
 
 - name: Install binary
